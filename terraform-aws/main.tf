@@ -90,7 +90,7 @@ resource "aws_elb" "es_client_lb" {
 
   name            = "${format("%s-client-lb", var.es_cluster)}"
   security_groups = ["${aws_security_group.elasticsearch_clients_security_group.id}"]
-  subnets = ["${data.aws_subnet_ids.selected.ids}"]
+  subnets         = ["${var.vpc_subnets}"]
   internal        = true
 
   cross_zone_load_balancing   = true

@@ -12,6 +12,12 @@ variable "vpc_id" {
   type = "string"
 }
 
+variable "vpc_subnets" {
+  description = "VPC subnet IDs to create the Elasticsearch cluster in"
+  type = "list"
+  default = [""]
+}
+
 variable "availability_zones" {
   type = "list"
   description = "AWS region to launch servers; if not set the available zones will be detected automatically"
