@@ -4,9 +4,7 @@
     {
       "type": "amazon-ebs",
       "ami_name": "elasticsearch5-{{isotime | clean_ami_name}}",
-      "availability_zone": "{{user `aws_az`}}",
-      "iam_instance_profile": "packer",
-      "instance_type": "t2.micro",
+      "instance_type": "c4.large",
       "region": "{{user `aws_region`}}",
       "run_tags": {
         "role": "packer"
@@ -73,7 +71,7 @@
     {
       "type": "shell",
       "script": "install-cloud-plugin.sh",
-      "execute_command": "echo '' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+      "execute_command": "echo '' | {{ .Vars }} sudo -E -S bash '{{ .Path }}'"
     },
     {
       "type": "shell",

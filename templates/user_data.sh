@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -ex
 
 exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
 
@@ -71,13 +71,13 @@ sudo chown -R elasticsearch:elasticsearch ${elasticsearch_logs_dir}
 # we are assuming volume is declared and attached when data_dir is passed to the script
 if [ -n "${elasticsearch_data_dir}" ]; then
     sudo mkdir -p ${elasticsearch_data_dir}
-    sudo chown -R elasticsearch:elasticsearch ${elasticsearch_data_dir}
     sudo sed -i '$ a path.data: ${elasticsearch_data_dir}' /etc/elasticsearch/elasticsearch.yml
     if [ "${cloud_provider}" == "aws" ]; then
         sudo mkfs -t ext4 ${volume_name}
         sudo mount ${volume_name} ${elasticsearch_data_dir}
         sudo echo "${volume_name} ${elasticsearch_data_dir} ext4 defaults,nofail 0 2" >> /etc/fstab
     fi
+    sudo chown -R elasticsearch:elasticsearch ${elasticsearch_data_dir}
 fi
 
 if [ -f "/etc/nginx/nginx.conf" ]; then
