@@ -53,7 +53,7 @@ resource "aws_autoscaling_group" "client_nodes" {
 
   load_balancers = ["${aws_elb.es_client_lb.id}"]
 
-  vpc_zone_identifier = ["${data.aws_subnet_ids.selected.ids}"]
+  vpc_zone_identifier = ["${var.vpc_subnets}"]
 
   tag {
     key                 = "Name"
