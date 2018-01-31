@@ -36,8 +36,6 @@ Two modes of deployment are supported:
 
 At this point we consider the role `ingest` as unanimous with `data`, so all data nodes are also ingest nodes.
 
-The default mode is the single-node mode. To change it to the recommended configuration, edit `variables.tf` and set number of master nodes to 3, data nodes to at least 2, and client nodes to at least 1.
-
 All nodes with the `client` role will be attached to an ELB, so access to all client nodes can be done via the DNS it exposes. 
 
 ### Security groups
