@@ -101,7 +101,7 @@ resource "aws_elb" "es_client_lb" {
   listener {
     instance_port     = 8080
     instance_protocol = "http"
-    lb_port           = 80
+    lb_port           = 8080
     lb_protocol       = "http"
   }
 
