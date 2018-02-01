@@ -110,6 +110,11 @@ variable "client_pwd" {
   default = "changeme"
 }
 
+variable "health_check_type" {
+  description = "Controls how health checking is done. Must be one of EC2 or ELB."
+  default     = "EC2"
+}
+
 # the ability to add additional existing security groups. In our case
 # we have consul running as agents on the box
 variable "additional_security_groups" {
