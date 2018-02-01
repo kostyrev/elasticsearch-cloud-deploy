@@ -43,6 +43,11 @@ variable "master_instance_type" {
   default = "m4.large"
 }
 
+variable "client_instance_type" {
+  type = "string"
+  default = "m4.large"
+}
+
 variable "elasticsearch_volume_size" {
   type = "string"
   default = "100" # gb
@@ -73,6 +78,11 @@ variable "data_heap_size" {
 variable "master_heap_size" {
   type = "string"
   default = "2g"
+}
+
+variable "client_heap_size" {
+  type = "string"
+  default = "6g"
 }
 
 variable "masters_count" {

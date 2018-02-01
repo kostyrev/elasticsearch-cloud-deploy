@@ -6,7 +6,7 @@ data "template_file" "client_userdata_script" {
     volume_name             = ""
     elasticsearch_data_dir  = ""
     elasticsearch_logs_dir  = "${var.elasticsearch_logs_dir}"
-    heap_size               = "1g"
+    heap_size               = "${var.client_heap_size}"
     es_cluster              = "${var.es_cluster}"
     es_environment          = "${var.environment}-${var.es_cluster}"
     security_groups         = "${aws_security_group.elasticsearch_security_group.id}"
@@ -25,7 +25,7 @@ data "template_file" "client_userdata_script" {
 resource "aws_launch_configuration" "client" {
   name_prefix = "elasticsearch-${var.es_cluster}-client-nodes"
   image_id = "${data.aws_ami.kibana_client.id}"
-  instance_type = "${var.master_instance_type}"
+  instance_type = "${var.client_instance_type}"
   security_groups = ["${aws_security_group.elasticsearch_security_group.id}","${aws_security_group.elasticsearch_clients_security_group.id}"]
   associate_public_ip_address = false
   iam_instance_profile = "${aws_iam_instance_profile.elasticsearch.id}"
