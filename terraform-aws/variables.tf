@@ -102,6 +102,11 @@ variable "security_enabled" {
   default = "false"
 }
 
+# whether or not to enable x-pack monitoring on the cluster
+variable "monitoring_enabled" {
+  default = "false"
+}
+
 # client nodes have nginx installed on them, these credentials are used for basic auth
 variable "client_user" {
   default = "exampleuser"
