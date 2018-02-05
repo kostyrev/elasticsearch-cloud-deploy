@@ -49,11 +49,6 @@
       "execute_command": "echo '' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
     },
     {
-      "type": "shell",
-      "script": "install-grafana.sh",
-      "execute_command": "echo '' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
-    },
-    {
       "type": "file",
       "source": "../templates/nginx-client.conf",
       "destination": "nginx-client.conf"

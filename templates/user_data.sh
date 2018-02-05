@@ -102,19 +102,6 @@ if [ -f "/etc/kibana/kibana.yml" ]; then
     sudo service kibana restart
 fi
 
-if [ -f "/etc/nginx/nginx.conf" ]; then
-    sudo rm /etc/grafana/grafana.ini
-    cat <<'EOF' >>/etc/grafana/grafana.ini
-[security]
-admin_user = ${client_user}
-admin_password = ${client_pwd}
-EOF
-    sudo /bin/systemctl daemon-reload
-    sudo /bin/systemctl enable grafana-server.service
-    sudo service grafana-server start
-fi
-
-sleep 60
 if [ `systemctl is-failed elasticsearch.service` == 'failed' ];
 then
     log "Elasticsearch unit failed to start"
