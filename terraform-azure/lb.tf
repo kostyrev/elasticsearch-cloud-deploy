@@ -48,7 +48,7 @@ resource "azurerm_lb_probe" "clients-httpprobe" {
   loadbalancer_id = "${var.associate_public_ip == true ? azurerm_lb.clients-public.id : azurerm_lb.clients.id}"
 }
 
-// Kibana, Cerebro and Elasticsearch access - protected by default by the nginx proxy
+// Kibana and Elasticsearch access - protected by default by the nginx proxy
 resource "azurerm_lb_rule" "clients-lb-rule" {
   name = "es-${var.es_cluster}-clients-lb-rule"
   backend_port = 8080
