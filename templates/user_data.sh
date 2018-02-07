@@ -108,6 +108,6 @@ fi
 
 if [ `systemctl is-failed elasticsearch.service` == 'failed' ];
 then
-    log "Elasticsearch unit failed to start"
+    echo "Elasticsearch unit failed to start"
     exit 1
 fi
