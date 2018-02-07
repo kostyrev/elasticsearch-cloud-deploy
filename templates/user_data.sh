@@ -92,6 +92,10 @@ systemctl daemon-reload
 systemctl enable elasticsearch.service
 systemctl start elasticsearch.service
 
+grep 'http.enabled: true' /etc/elasticsearch/elasticsearch.yml
+if [ $? -eq 0 ]; then
+    until curl --output /dev/null --silent http://localhost:9200; do sleep 5;done
+fi
 
 # Setup x-pack security also on Kibana configs where applicable
 if [ -f "/etc/kibana/kibana.yml" ]; then
