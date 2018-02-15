@@ -61,6 +61,10 @@ variable "volume_encryption" {
   default = true
 }
 
+variable "ebs_optimized" {
+  default = true
+}
+
 variable "elasticsearch_data_dir" {
   default = "/opt/elasticsearch/data"
 }
