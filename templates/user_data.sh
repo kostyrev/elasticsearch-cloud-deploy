@@ -59,6 +59,14 @@ cat <<'EOF' >>/etc/systemd/system/elasticsearch.service.d/override.conf
 LimitMEMLOCK=infinity
 EOF
 
+# Restart elasticsearch on failures
+# https://github.com/elastic/elasticsearch/issues/25425
+cat <<'EOF' >>/etc/systemd/system/elasticsearch.service.d/restart.conf
+[Service]
+Restart=on-failure
+RestartSec=30
+EOF
+
 # Setup heap size and memory locking
 sudo sed -i 's/#MAX_LOCKED_MEMORY=.*$/MAX_LOCKED_MEMORY=unlimited/' /etc/init.d/elasticsearch
 sudo sed -i 's/#MAX_LOCKED_MEMORY=.*$/MAX_LOCKED_MEMORY=unlimited/' /etc/default/elasticsearch
