@@ -19,10 +19,7 @@ resource "aws_security_group" "elasticsearch_security_group" {
   description = "Elasticsearch ports with ssh"
   vpc_id = "${var.vpc_id}"
 
-  tags {
-    Name = "${var.es_cluster}-elasticsearch"
-    cluster = "${var.es_cluster}"
-  }
+  tags = "${merge(var.tags, map("Name", format("%s-elasticsearch", var.es_cluster), "cluster", var.es_cluster))}"
 
   # ssh access from everywhere
   ingress {
@@ -61,10 +58,7 @@ resource "aws_security_group" "elasticsearch_clients_security_group" {
   description = "Kibana HTTP access from outside"
   vpc_id = "${var.vpc_id}"
 
-  tags {
-    Name = "${var.es_cluster}-kibana"
-    cluster = "${var.es_cluster}"
-  }
+  tags = "${merge(var.tags, map("Name", format("%s-kibana", var.es_cluster), "cluster", var.es_cluster))}"
 
   # allow HTTP access to client nodes via ports 8080 and 80 (ELB)
   # better to disable, and either way always password protect!
@@ -125,7 +119,5 @@ resource "aws_elb" "es_client_lb" {
     interval            = 6
   }
 
-  tags {
-    Name = "${format("%s-client-lb", var.es_cluster)}"
-  }
+  tags = "${merge(var.tags, map("Name", format("%s-client-lb", var.es_cluster)))}"
 }

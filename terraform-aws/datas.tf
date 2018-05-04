@@ -46,6 +46,31 @@ resource "aws_launch_configuration" "data" {
   }
 }
 
+locals {
+  data_node_tags = [
+    {
+      key                 = "Name"
+      value               = "${format("%s-data-node", var.es_cluster)}"
+      propagate_at_launch = true
+    },
+    {
+      key                 = "Environment"
+      value               = "${var.environment}"
+      propagate_at_launch = true
+    },
+    {
+      key                 = "Cluster"
+      value               = "${var.environment}-${var.es_cluster}"
+      propagate_at_launch = true
+    },
+    {
+      key                 = "Role"
+      value               = "data"
+      propagate_at_launch = true
+    },
+  ]
+}
+
 resource "aws_autoscaling_group" "data_nodes" {
   name = "elasticsearch-${var.es_cluster}-data-nodes"
   max_size = "${var.datas_count}"
@@ -59,29 +84,7 @@ resource "aws_autoscaling_group" "data_nodes" {
 
   depends_on = ["aws_autoscaling_group.master_nodes"]
 
-  tag {
-    key                 = "Name"
-    value               = "${format("%s-data-node", var.es_cluster)}"
-    propagate_at_launch = true
-  }
-
-  tag {
-    key = "Environment"
-    value = "${var.environment}"
-    propagate_at_launch = true
-  }
-
-  tag {
-    key = "Cluster"
-    value = "${var.environment}-${var.es_cluster}"
-    propagate_at_launch = true
-  }
-
-  tag {
-    key = "Role"
-    value = "data"
-    propagate_at_launch = true
-  }
+  tags = ["${concat(local.tags, local.data_node_tags)}"]
 
   lifecycle {
     create_before_destroy = true

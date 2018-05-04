@@ -142,3 +142,8 @@ variable "ebs_optimized" {
   description = "Whether data instances are EBS optimized or not"
   default = "true"
 }
+
+variable "tags" {
+  description = "Additional instance tags"
+  default     = {}
+}
