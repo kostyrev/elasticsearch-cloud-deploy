@@ -4,9 +4,9 @@ resource "aws_iam_role" "elasticsearch" {
 }
 
 resource "aws_iam_role_policy" "elasticsearch" {
-  name     = "${var.es_cluster}-elasticsearch-discovery-policy"
-  policy   = "${file("${path.module}/../templates/ec2-allow-describe-instances.json")}"
-  role     = "${aws_iam_role.elasticsearch.id}"
+  name   = "${var.es_cluster}-elasticsearch-discovery-policy"
+  policy = "${file("${path.module}/../templates/ec2-allow-describe-instances.json")}"
+  role   = "${aws_iam_role.elasticsearch.id}"
 }
 
 resource "aws_iam_instance_profile" "elasticsearch" {

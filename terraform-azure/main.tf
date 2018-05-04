@@ -1,19 +1,19 @@
 provider "azurerm" {
   subscription_id = "${var.azure_subscription_id}"
-  client_id = "${var.azure_client_id}"
-  client_secret = "${var.azure_client_secret}"
-  tenant_id = "${var.azure_tenant_id}"
+  client_id       = "${var.azure_client_id}"
+  client_secret   = "${var.azure_client_secret}"
+  tenant_id       = "${var.azure_tenant_id}"
 }
 
 resource "random_string" "vm-login-password" {
-  length = 16
-  special = true
+  length           = 16
+  special          = true
   override_special = "!@#$%&-_"
 }
 
 resource "azurerm_resource_group" "elasticsearch" {
   location = "${var.azure_location}"
-  name = "elasticsearch-cluster-${var.es_cluster}"
+  name     = "elasticsearch-cluster-${var.es_cluster}"
 }
 
 resource "azurerm_virtual_network" "elasticsearch_vnet" {
