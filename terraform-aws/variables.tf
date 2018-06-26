@@ -129,3 +129,8 @@ variable "health_check_type" {
 variable "additional_security_groups" {
   default = ""
 }
+
+variable "tags" {
+  description = "Additional instance tags"
+  default     = {}
+}

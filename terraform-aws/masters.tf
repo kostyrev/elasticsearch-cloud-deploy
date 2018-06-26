@@ -38,6 +38,31 @@ resource "aws_launch_configuration" "master" {
   }
 }
 
+locals {
+  master_node_tags = [
+    {
+      key                 = "Name"
+      value               = "${format("%s-master-node", var.es_cluster)}"
+      propagate_at_launch = true
+    },
+    {
+      key                 = "Environment"
+      value               = "${var.environment}"
+      propagate_at_launch = true
+    },
+    {
+      key                 = "Cluster"
+      value               = "${var.environment}-${var.es_cluster}"
+      propagate_at_launch = true
+    },
+    {
+      key                 = "Role"
+      value               = "master"
+      propagate_at_launch = true
+    },
+  ]
+}
+
 resource "aws_autoscaling_group" "master_nodes" {
   name = "elasticsearch-${var.es_cluster}-master-nodes"
   max_size = "${var.masters_count}"
@@ -49,29 +74,7 @@ resource "aws_autoscaling_group" "master_nodes" {
 
   vpc_zone_identifier = ["${var.vpc_subnets}"]
 
-  tag {
-    key                 = "Name"
-    value               = "${format("%s-master-node", var.es_cluster)}"
-    propagate_at_launch = true
-  }
-
-  tag {
-    key = "Environment"
-    value = "${var.environment}"
-    propagate_at_launch = true
-  }
-
-  tag {
-    key = "Cluster"
-    value = "${var.environment}-${var.es_cluster}"
-    propagate_at_launch = true
-  }
-
-  tag {
-    key = "Role"
-    value = "master"
-    propagate_at_launch = true
-  }
+  tags = ["${concat(local.tags, local.master_node_tags)}"]
 
   lifecycle {
     create_before_destroy = true

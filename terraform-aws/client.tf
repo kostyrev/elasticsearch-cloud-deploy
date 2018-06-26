@@ -38,6 +38,31 @@ resource "aws_launch_configuration" "client" {
   }
 }
 
+locals {
+  client_node_tags = [
+    {
+      key                 = "Name"
+      value               = "elasticsearch-${var.es_cluster}-client-node"
+      propagate_at_launch = true
+    },
+    {
+      key                 = "Environment"
+      value               = "${var.environment}"
+      propagate_at_launch = true
+    },
+    {
+      key                 = "Cluster"
+      value               = "${var.environment}-${var.es_cluster}"
+      propagate_at_launch = true
+    },
+    {
+      key                 = "Role"
+      value               = "client"
+      propagate_at_launch = true
+    },
+  ]
+}
+
 resource "aws_autoscaling_group" "client_nodes" {
   name = "elasticsearch-${var.es_cluster}-client-nodes"
   max_size = "${var.clients_count}"
@@ -52,29 +77,7 @@ resource "aws_autoscaling_group" "client_nodes" {
 
   vpc_zone_identifier = ["${var.vpc_subnets}"]
 
-  tag {
-    key                 = "Name"
-    value               = "${format("%s-client-node", var.es_cluster)}"
-    propagate_at_launch = true
-  }
-
-  tag {
-    key = "Environment"
-    value = "${var.environment}"
-    propagate_at_launch = true
-  }
-
-  tag {
-    key = "Cluster"
-    value = "${var.environment}-${var.es_cluster}"
-    propagate_at_launch = true
-  }
-
-  tag {
-    key = "Role"
-    value = "client"
-    propagate_at_launch = true
-  }
+  tags = ["${concat(local.tags, local.client_node_tags)}"]
 
   lifecycle {
     create_before_destroy = true
