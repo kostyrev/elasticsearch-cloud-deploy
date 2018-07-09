@@ -109,3 +109,8 @@ variable "additional_security_groups" {
   type = "list"
   default = []
 }
+
+variable "health_check_type" {
+  description = "Controls how health checking is done. Must be one of EC2 or ELB."
+  default     = "EC2"
+}
