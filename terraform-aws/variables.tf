@@ -113,4 +113,8 @@ variable "additional_security_groups" {
 variable "health_check_type" {
   description = "Controls how health checking is done. Must be one of EC2 or ELB."
   default     = "EC2"
+
+variable "ebs_optimized" {
+  description = "Whether data instances are EBS optimized or not"
+  default = "true"
 }
