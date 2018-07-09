@@ -70,6 +70,14 @@ cat <<'EOF' >>/etc/systemd/system/elasticsearch.service.d/override.conf
 LimitMEMLOCK=infinity
 EOF
 
+# Restart elasticsearch on failures
+# https://github.com/elastic/elasticsearch/issues/25425
+cat <<'EOF' >>/etc/systemd/system/elasticsearch.service.d/restart.conf
+[Service]
+Restart=on-failure
+RestartSec=30
+EOF
+
 # Setup heap size and memory locking
 sudo sed -i 's/#MAX_LOCKED_MEMORY=.*$/MAX_LOCKED_MEMORY=unlimited/' /etc/init.d/elasticsearch
 sudo sed -i 's/#MAX_LOCKED_MEMORY=.*$/MAX_LOCKED_MEMORY=unlimited/' /etc/default/elasticsearch
@@ -83,12 +91,12 @@ sudo chown -R elasticsearch:elasticsearch ${elasticsearch_logs_dir}
 # we are assuming volume is declared and attached when data_dir is passed to the script
 if [ "true" == "${data}" ]; then
     sudo mkdir -p ${elasticsearch_data_dir}
-    sudo chown -R elasticsearch:elasticsearch ${elasticsearch_data_dir}
-    if [[ "${cloud_provider}" == "aws" && -n "${volume_name}" ]]; then
+    if [[ "${cloud_provider}" == "aws" ]]; then
         sudo mkfs -t ext4 ${volume_name}
         sudo mount ${volume_name} ${elasticsearch_data_dir}
         sudo echo "${volume_name} ${elasticsearch_data_dir} ext4 defaults,nofail 0 2" >> /etc/fstab
     fi
+    sudo chown -R elasticsearch:elasticsearch ${elasticsearch_data_dir}
 fi
 
 if [ -f "/etc/nginx/nginx.conf" ]; then
@@ -102,6 +110,10 @@ systemctl daemon-reload
 systemctl enable elasticsearch.service
 systemctl start elasticsearch.service
 
+grep 'http.enabled: true' /etc/elasticsearch/elasticsearch.yml
+if [ $? -eq 0 ]; then
+    until curl --output /dev/null --silent http://localhost:9200/; do sleep 5;done
+fi
 
 # Setup x-pack security also on Kibana configs where applicable
 if [ -f "/etc/kibana/kibana.yml" ]; then
@@ -112,21 +124,8 @@ if [ -f "/etc/kibana/kibana.yml" ]; then
     sudo service kibana restart
 fi
 
-if [ -f "/etc/nginx/nginx.conf" ]; then
-    sudo rm /etc/grafana/grafana.ini
-    cat <<'EOF' >>/etc/grafana/grafana.ini
-[security]
-admin_user = ${client_user}
-admin_password = ${client_pwd}
-EOF
-    sudo /bin/systemctl daemon-reload
-    sudo /bin/systemctl enable grafana-server.service
-    sudo service grafana-server start
-fi
-
-sleep 60
 if [ `systemctl is-failed elasticsearch.service` == 'failed' ];
 then
-    log "Elasticsearch unit failed to start"
+    echo "Elasticsearch unit failed to start"
     exit 1
 fi

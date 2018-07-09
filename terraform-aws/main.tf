@@ -81,14 +81,6 @@ resource "aws_security_group" "elasticsearch_clients_security_group" {
     cidr_blocks       = ["0.0.0.0/0"]
   }
 
-  # allow HTTP access to client nodes via port 3000 for Grafana which has it's own login screen
-  ingress {
-    from_port         = 3000
-    to_port           = 3000
-    protocol          = "tcp"
-    cidr_blocks       = ["0.0.0.0/0"]
-  }
-
   egress {
     from_port         = 0
     to_port           = 0
@@ -115,13 +107,6 @@ resource "aws_elb" "es_client_lb" {
     instance_port     = 8080
     instance_protocol = "http"
     lb_port           = 80
-    lb_protocol       = "http"
-  }
-
-  listener {
-    instance_port     = 3000
-    instance_protocol = "http"
-    lb_port           = 3000
     lb_protocol       = "http"
   }
 

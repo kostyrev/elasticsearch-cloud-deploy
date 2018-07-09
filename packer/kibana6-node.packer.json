@@ -6,7 +6,6 @@
 
       "ami_name": "kibana6-{{isotime | clean_ami_name}}",
       "availability_zone": "{{user `aws_az`}}",
-      "iam_instance_profile": "packer",
       "instance_type": "t2.medium",
       "region": "{{user `aws_region`}}",
       "run_tags": {
@@ -66,16 +65,6 @@
       "type": "shell",
       "script": "install-kibana6.sh",
       "environment_vars": [ "ES_VERSION={{user `elasticsearch_version`}}" ],
-      "execute_command": "echo '' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
-    },
-    {
-      "type": "shell",
-      "script": "install-grafana.sh",
-      "execute_command": "echo '' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
-    },
-    {
-      "type": "shell",
-      "script": "install-cerebro.sh",
       "execute_command": "echo '' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
     },
     {

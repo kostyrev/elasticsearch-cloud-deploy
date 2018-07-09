@@ -5,7 +5,6 @@
       "type": "amazon-ebs",
       "ami_name": "elasticsearch6-{{isotime | clean_ami_name}}",
       "availability_zone": "{{user `aws_az`}}",
-      "iam_instance_profile": "packer",
       "instance_type": "t2.micro",
       "region": "{{user `aws_region`}}",
       "run_tags": {
