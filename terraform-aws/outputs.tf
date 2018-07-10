@@ -7,5 +7,5 @@ output "clients_elb_zone_id" {
 }
 
 output "vm_password" {
-  value = "${random_string.vm-login-password.result}"
+  value = "${local.client_pwd}"
 }
