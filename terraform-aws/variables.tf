@@ -146,4 +146,8 @@ variable "ebs_optimized" {
 variable "tags" {
   description = "Additional instance tags"
   default     = {}
+
+variable "lb_port" {
+  description = "The port the load balancer should listen on for API requests."
+  default     = 80
 }
