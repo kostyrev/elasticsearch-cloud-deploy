@@ -157,3 +157,13 @@ variable "client_pwd" {
   description = "Set admin password for kibana, generated if not provided"
   default = "GENERATE"
 }
+
+variable "manage_s3_iam" {
+  description = "Whether to configure IAM policy for S3 backups"
+  default     = false
+}
+
+variable "s3_bucket_name" {
+  description = "The name of the S3 bucket to use for backups. Only used if 'manage_s3_iam' is set to true."
+  default     = ""
+}
