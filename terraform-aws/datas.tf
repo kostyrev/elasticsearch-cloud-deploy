@@ -22,6 +22,9 @@ data "template_file" "data_userdata_script" {
 }
 
 resource "aws_launch_configuration" "data" {
+  // Only create an ELB if it's not a single-node configuration
+  count = "${var.masters_count == "0" && var.datas_count == "0" ? "0" : "1"}"
+
   name_prefix = "elasticsearch-${var.es_cluster}-data-nodes"
   image_id = "${data.aws_ami.elasticsearch.id}"
   instance_type = "${var.data_instance_type}"
@@ -46,6 +49,9 @@ resource "aws_launch_configuration" "data" {
 }
 
 resource "aws_autoscaling_group" "data_nodes" {
+  // Only create an ELB if it's not a single-node configuration
+  count = "${var.masters_count == "0" && var.datas_count == "0" ? "0" : "1"}"
+
   name = "elasticsearch-${var.es_cluster}-data-nodes"
   max_size = "${var.datas_count}"
   min_size = "${var.datas_count}"
