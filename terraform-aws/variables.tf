@@ -48,6 +48,10 @@ variable "elasticsearch_volume_size" {
   default = "100" # gb
 }
 
+variable "volume_name" {
+  default = "/dev/xvdh"
+}
+
 variable "volume_encryption" {
   default = true
 }
