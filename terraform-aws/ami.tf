@@ -9,6 +9,7 @@ data "aws_ami" "elasticsearch" {
     values = ["elasticsearch6-packer-image"]
   }
   most_recent = true
+  owners = ["self"]
 }
 
 // Find the latest available AMI for the Kibana client node
@@ -22,4 +23,6 @@ data "aws_ami" "kibana_client" {
     values = ["kibana6-packer-image"]
   }
   most_recent = true
+  owners = ["self"]
+
 }
